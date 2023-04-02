@@ -1,0 +1,26 @@
+{
+  "name": "factsbite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "data.js",
+  "scripts": {
+    "start": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hammadxp/FactsBite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hammadxp/FactsBite/issues"
+  },
+  "homepage": "https://github.com/hammadxp/FactsBite#readme",
+  "devDependencies": {
+    "postcss": "^8.4.21",
+    "prettier-plugin-tailwindcss": "^0.2.6",
+    "tailwindcss": "^3.3.1",
+    "vite": "^4.2.1"
+  }
+}
