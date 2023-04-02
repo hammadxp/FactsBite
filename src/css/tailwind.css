@@ -1,3 +1,5 @@
-@apply base;
-@apply components;
-@apply utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @layer components {} */
