@@ -3,19 +3,48 @@
 @tailwind utilities;
 
 @layer components {
+  /* BUTTONS */
+
   .btn {
-    @apply cursor-pointer rounded-full border-4 border-slate-50 bg-pink-400 px-6 py-2 font-semibold text-slate-900 duration-200 hover:scale-105 hover:bg-transparent hover:text-slate-50;
+    @apply cursor-pointer rounded-xl border-4 border-pink-400 bg-transparent px-6 py-2 font-semibold text-slate-900 shadow-sm duration-200;
+  }
+
+  .btn-interact {
+    @apply rounded-full px-4 py-1 duration-100;
   }
 
   .btn-gradient {
+    @apply btn bg-gradient-to-br from-pink-400 to-pink-800 text-slate-50;
     /* @apply btn bg-[linear-gradient(135deg, #60a5fa, #f87171, #4ade80, #facc15)]; */
   }
 
-  .btn-small {
-    @apply rounded-full border-2 border-transparent bg-slate-500 px-4 py-1 duration-100 hover:border-slate-500 hover:bg-slate-600;
+  .tag {
+    @apply btn rounded-full;
   }
 
-  .form-item {
-    @apply rounded-lg px-4 py-2;
+  /* SIDEBAR */
+
+  .sidebar-item {
+    @apply mb-4 flex h-16 w-full items-center rounded-lg pl-8 text-lg font-semibold text-slate-700 hover:bg-pink-100;
   }
+
+  .sidebar-item-active {
+    @apply bg-pink-100 shadow-sm;
+  }
+
+  /* FACTS */
+
+  .fact-item {
+    @apply mb-4 flex items-center gap-2 rounded-lg border-2 px-6 py-4 text-slate-800;
+  }
+
+  /* OTHER */
+
+  .form-item {
+    @apply rounded-lg px-4 py-3;
+  }
+}
+
+form *:focus-visible {
+  @apply focus:outline-none focus:ring-4 focus:ring-pink-300;
 }
