@@ -18,8 +18,18 @@
     /* @apply btn bg-[linear-gradient(135deg, #60a5fa, #f87171, #4ade80, #facc15)]; */
   }
 
+  .tag-small {
+    @apply rounded-full px-3 py-1 text-xs font-semibold uppercase;
+  }
+
+  /* TAG BAR */
+
   .tag {
     @apply btn rounded-full;
+  }
+
+  .tag-active {
+    @apply bg-red-400;
   }
 
   /* SIDEBAR */
@@ -35,7 +45,7 @@
   /* FACTS */
 
   .fact-item {
-    @apply mb-4 flex items-center gap-2 rounded-lg border-2 px-6 py-4 text-slate-800;
+    @apply mb-4 flex cursor-default items-center gap-2 rounded-lg px-6 py-4 text-slate-800;
   }
 
   /* OTHER */
