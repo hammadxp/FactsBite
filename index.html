@@ -11,24 +11,23 @@
       href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Sono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
     <link href="/src/css/tailwind.css" rel="stylesheet" />
     <title>FactsBite</title>
   </head>
-  <body class="bg-gradient-to-br from-pink-300 to-red-400 font-Rubik text-slate-900">
-    <div class="mx-auto my-14 h-[40rem] max-w-6xl overflow-hidden rounded-xl bg-white shadow-md">
-      <header class="bg-pink-50 p-6">
+  <body class="bg-gray-900 font-Rubik text-slate-50">
+    <div class="mx-auto h-[40rem] max-w-7xl">
+      <header class="p-6">
         <div class="flex items-center">
           <img src="/src/img/logo.png" alt="FactsBite logo" class="h-12" />
           <h1 class="ml-4 text-2xl font-bold">FactsBite</h1>
           <button class="btn-gradient ml-auto">Share a fact</button>
         </div>
 
-        <form
-          action=""
-          class="mb-4 mt-6 flex hidden items-center gap-4 rounded-lg bg-pink-300 p-3 focus:outline-none focus:ring-8 focus:ring-pink-800"
-        >
+        <form action="" class="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900">
           <input type="text" placeholder="Share a fact with the world" class="form-item w-full" />
-          <span>200</span>
+          <span class="text-slate-50">200</span>
 
           <input type="text" placeholder="Trustworthy source" class="form-item" />
           <select name="" id="" class="form-item">
@@ -41,7 +40,7 @@
         </form>
       </header>
 
-      <main class="grid grid-cols-[14rem,1fr]">
+      <main class="grid grid-cols-[16rem,1fr]">
         <nav class="p-4" id="sidebar">
           <ul>
             <li>
@@ -56,44 +55,45 @@
         <section class="p-8">
           <ul class="mb-6 flex gap-2" id="tags-row">
             <li>
-              <button class="tag tag-active">All</button>
+              <button class="btn-gradient">All</button>
             </li>
             <li>
-              <button class="tag border-blue-400">Technology</button>
+              <button class="btn-tag bg-[#3b82f6]">Technology</button>
             </li>
             <li>
-              <button class="tag border-green-400">Science</button>
+              <button class="btn-tag bg-[#16a34a]">Science</button>
             </li>
           </ul>
 
-          <ul id="facts-list">
-            <li class="fact-item bg-gradient-to-br from-[#3b82f6]/70 to-[#3b82f6] text-slate-50 hover:bg-[#3b82f6]/30">
+          <ul class="font-Sono" id="facts-list">
+            <li class="fact-item">
               <p>
                 React is being developed by Meta (formerly facebook)
-                <a href="https://opensource.fb.com/" target="_blank">(Source)</a>
-                <span class="tag-small bg-white text-[#3b82f6]">technology</span>
+                <a href="https://opensource.fb.com/" target="_blank" class="fact-source">(Source)</a>
+                <span class="tag-small bg-[#3b82f6]">technology</span>
               </p>
               <div class="ml-auto min-w-max max-w-fit">
-                <button class="btn-interact bg-[#3b82f6]/40 hover:bg-[#3b82f6]/50">👍 25</button>
-                <button class="btn-interact bg-[#3b82f6]/40 hover:bg-[#3b82f6]/50">🤯 10</button>
-                <button class="btn-interact bg-[#3b82f6]/40 hover:bg-[#3b82f6]/50">⛔️ 4</button>
+                <button class="btn-interact">👍 <span class="font-bold">25</span></button>
+                <button class="btn-interact">🤯 <span class="font-bold">10</span></button>
+                <button class="btn-interact">⛔️ <span class="font-bold">4</span></button>
               </div>
             </li>
-            <li class="fact-item bg-gradient-to-br from-[#16a34a]/70 to-[#16a34a] text-slate-50 hover:bg-[#16a34a]/30">
+            <li class="fact-item">
               <p>
                 Millennial dads spend 3 times as much time with their kids than their fathers spent with them. In 1982,
                 43% of fathers had never changed a diaper. Today, that number is down to 3%
                 <a
                   href="https://www.mother.ly/parenting/millennial-dads-spend-more-time-with-their-kids"
                   target="_blank"
+                  class="fact-source"
                   >(Source)</a
                 >
-                <span class="tag-small bg-white text-[#16a34a]">society</span>
+                <span class="tag-small bg-[#16a34a]">society</span>
               </p>
               <div class="ml-auto min-w-max max-w-fit">
-                <button class="btn-interact bg-[#16a34a]/40 hover:bg-[#16a34a]/50">👍 11</button>
-                <button class="btn-interact bg-[#16a34a]/40 hover:bg-[#16a34a]/50">🤯 2</button>
-                <button class="btn-interact bg-[#16a34a]/40 hover:bg-[#16a34a]/50">⛔️ 0</button>
+                <button class="btn-interact">👍 11</button>
+                <button class="btn-interact">🤯 2</button>
+                <button class="btn-interact">⛔️ 0</button>
               </div>
             </li>
           </ul>
