@@ -22,10 +22,13 @@
         <div class="flex items-center">
           <img src="/src/img/logo.png" alt="FactsBite logo" class="h-12" />
           <h1 class="ml-4 text-2xl font-bold">FactsBite</h1>
-          <button class="btn-gradient ml-auto">Share a fact</button>
+          <button class="btn-add-new btn-gradient ml-auto">Share a fact</button>
         </div>
 
-        <form action="" class="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900">
+        <form
+          action=""
+          class="form-el mb-4 mt-6 flex hidden items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900"
+        >
           <input type="text" placeholder="Share a fact with the world" class="form-item w-full" />
           <span class="text-slate-50">200</span>
 
@@ -65,7 +68,7 @@
             </li>
           </ul>
 
-          <ul class="font-Sono" id="facts-list">
+          <ul class="facts-list-el font-Sono" id="facts-list">
             <li class="fact-item">
               <p>
                 React is being developed by Meta (formerly facebook)
@@ -100,5 +103,7 @@
         </section>
       </main>
     </div>
+
+    <script src="src/js/script.js"></script>
   </body>
 </html>
