@@ -1,18 +1,60 @@
+const categories = [
+  { name: "technology", color: "#3b82f6" },
+  { name: "science", color: "#16a34a" },
+  { name: "finance", color: "#ef4444" },
+  { name: "society", color: "#eab308" },
+  { name: "entertainment", color: "#db2777" },
+  { name: "health", color: "#14b8a6" },
+  { name: "history", color: "#f97316" },
+  { name: "news", color: "#8b5cf6" },
+];
+
+const facts = [
+  {
+    id: 1,
+    text: "React is being developed by Meta (formerly facebook)",
+    source: "https://opensource.fb.com/",
+    category: "technology",
+    votes_interesting: 24,
+    votes_mindblowing: 9,
+    votes_negative: 4,
+    createdIn: 2021,
+  },
+  {
+    id: 2,
+    text: "Millennial dads spend 3 times as much time with their kids than their fathers spent with them. In 1982, 43% of fathers had never changed a diaper. Today, that number is down to 3%",
+    source: "https://www.mother.ly/parenting/millennial-dads-spend-more-time-with-their-kids",
+    category: "society",
+    votes_interesting: 11,
+    votes_mindblowing: 2,
+    votes_negative: 0,
+    createdIn: 2019,
+  },
+  {
+    id: 3,
+    text: "Lisbon is the capital of Portugal",
+    source: "https://en.wikipedia.org/wiki/Lisbon",
+    category: "society",
+    votes_interesting: 8,
+    votes_mindblowing: 3,
+    votes_negative: 1,
+    createdIn: 2015,
+  },
+];
+
 function App() {
   return (
     <>
-      <div className="mx-auto h-[40rem] max-w-7xl">
-        <Header />
+      <Header />
 
-        <main className="grid grid-cols-[16rem,1fr]">
-          <SideBar />
+      <main className="grid grid-cols-[16rem,1fr]">
+        <SideBar />
 
-          <section className="p-8">
-            <TagsRow />
-            <FactsList />
-          </section>
-        </main>
-      </div>
+        <section className="overflow-x-hidden p-8 pt-4">
+          <TagsRow />
+          <FactsList />
+        </section>
+      </main>
     </>
   );
 }
@@ -78,49 +120,72 @@ function SideBar() {
 
 function TagsRow() {
   return (
-    <ul className="mb-6 flex gap-2" id="tags-row">
+    <ul className="mb-6 flex gap-2 overflow-x-scroll pt-[6px]" id="tags-row">
       <li>
         <button className="btn-gradient">All</button>
       </li>
-      <li>
-        <button className="btn-tag bg-[#3b82f6]">Technology</button>
-      </li>
-      <li>
-        <button className="btn-tag bg-[#16a34a]">Science</button>
-      </li>
+
+      {categories.map((category) => (
+        <li key={category.name}>
+          <button className="btn-tag" style={{ backgroundColor: category.color }}>
+            {category.name}
+          </button>
+        </li>
+      ))}
     </ul>
   );
 }
+
+// Facts list
 
 function FactsList() {
   return (
-    <ul className="font-Sono" id="facts-list">
-      <li className="fact-item">
-        <p>
-          React is being developed by Meta (formerly facebook)
-          <a href="https://opensource.fb.com/" target="_blank" className="fact-source">
-            (Source)
-          </a>
-          <span className="tag-small bg-[#3b82f6]">technology</span>
-        </p>
+    <>
+      <ul className="font-Sono" id="facts-list">
+        {facts.map((fact) => (
+          <Fact fact={fact} key={fact.id} />
+        ))}
+      </ul>
 
-        <VoteButtons />
-      </li>
-    </ul>
+      <p>There are currently {facts.length} facts in the database.</p>
+    </>
   );
 }
 
-function VoteButtons() {
+function Fact({ fact }) {
+  return (
+    <li className="fact-item">
+      <p>
+        {fact.text}
+        <a href={fact.source} target="_blank" className="fact-source">
+          (Source)
+        </a>
+        <span
+          className="tag-small"
+          style={{
+            backgroundColor: categories.find((category) => category.name === fact.category).color,
+          }}
+        >
+          {fact.category}
+        </span>
+      </p>
+
+      <VoteButtons fact={fact} />
+    </li>
+  );
+}
+
+function VoteButtons({ fact }) {
   return (
     <div className="ml-auto flex min-w-max max-w-fit gap-2">
       <button className="btn-vote">
-        👍 <span className="font-bold">25</span>
+        👍 <span className="font-bold">{fact.votes_interesting}</span>
       </button>
       <button className="btn-vote">
-        🤯 <span className="font-bold">10</span>
+        🤯 <span className="font-bold">{fact.votes_mindblowing}</span>
       </button>
       <button className="btn-vote">
-        ⛔️ <span className="font-bold">4</span>
+        ⛔️ <span className="font-bold">{fact.votes_negative}</span>
       </button>
     </div>
   );

@@ -10,7 +10,7 @@
   }
 
   .btn-tag {
-    @apply btn rounded-full border-0 py-3 text-slate-50;
+    @apply btn rounded-full border-0 py-3 uppercase text-slate-50;
   }
 
   .btn-gradient {
@@ -54,4 +54,8 @@
 
 form *:focus-visible {
   @apply focus:outline-none focus:ring-4 focus:ring-slate-300;
+}
+
+#tags-row::-webkit-scrollbar {
+  display: none;
 }
