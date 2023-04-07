@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const categories = [
   { name: "technology", color: "#3b82f6" },
   { name: "science", color: "#16a34a" },
@@ -62,6 +64,8 @@ function App() {
 // Header
 
 function Header() {
+  const [formVisibility, setFormVisibility] = useState(false);
+
   const headerTitle = "FactsBite";
 
   return (
@@ -69,19 +73,19 @@ function Header() {
       <div className="flex items-center">
         <img src="logo.png" alt="FactsBite logo" className="h-12" />
         <h1 className="ml-4 text-2xl font-bold">{headerTitle}</h1>
-        <button className="btn-gradient ml-auto" id="btn-add-new">
-          Share a fact
+        <button className="btn-gradient ml-auto" onClick={() => setFormVisibility((current) => !current)}>
+          {formVisibility ? "Close" : "Share a fact"}
         </button>
       </div>
 
-      <Form />
+      {formVisibility ? <Form /> : null}
     </header>
   );
 }
 
 function Form() {
   return (
-    <form action="" className="mb-4 mt-6 flex hidden items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900">
+    <form action="" className="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900">
       <input type="text" placeholder="Share a fact with the world" className="form-item w-full" />
       <span className="text-slate-50">200</span>
 
@@ -140,15 +144,11 @@ function TagsRow() {
 
 function FactsList() {
   return (
-    <>
-      <ul className="font-Sono" id="facts-list">
-        {facts.map((fact) => (
-          <Fact fact={fact} key={fact.id} />
-        ))}
-      </ul>
-
-      <p>There are currently {facts.length} facts in the database.</p>
-    </>
+    <ul className="font-Sono" id="facts-list">
+      {facts.map((fact) => (
+        <Fact fact={fact} key={fact.id} />
+      ))}
+    </ul>
   );
 }
 
@@ -186,6 +186,25 @@ function VoteButtons({ fact }) {
       </button>
       <button className="btn-vote">
         ⛔️ <span className="font-bold">{fact.votes_negative}</span>
+      </button>
+    </div>
+  );
+}
+
+// Test
+
+function TotalFacts() {
+  return <p>There are currently {facts.length} facts in the database.</p>;
+}
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <span className="px-4">{count}</span>
+      <button className="btn" onClick={() => setCount((current) => current + 1)}>
+        +1
       </button>
     </div>
   );

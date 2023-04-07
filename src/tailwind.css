@@ -6,7 +6,7 @@
   /* BUTTONS */
 
   .btn {
-    @apply cursor-pointer rounded-xl border-4 border-pink-400 bg-transparent px-6 py-2 font-semibold text-slate-900 shadow-sm duration-200 hover:-translate-y-1;
+    @apply cursor-pointer rounded-full border-4 border-transparent bg-pink-400 px-6 py-2 font-semibold text-slate-900 shadow-sm duration-200 hover:-translate-y-1;
   }
 
   .btn-tag {
