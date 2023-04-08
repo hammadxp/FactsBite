@@ -11,7 +11,7 @@ const categories = [
   { name: "news", color: "#8b5cf6" },
 ];
 
-const facts = [
+const initialFacts = [
   {
     id: 1,
     text: "React is being developed by Meta (formerly facebook)",
@@ -44,17 +44,22 @@ const facts = [
   },
 ];
 
+//
+
 function App() {
+  const [formVisibility, setFormVisibility] = useState(false);
+  const [facts, setFacts] = useState(initialFacts);
+
   return (
     <>
-      <Header />
+      <Header formVisibility={formVisibility} setFormVisibility={setFormVisibility} setFacts={setFacts} />
 
       <main className="grid grid-cols-[16rem,1fr]">
         <SideBar />
 
         <section className="overflow-x-hidden p-8 pt-4">
           <TagsRow />
-          <FactsList />
+          <FactsList facts={facts} />
         </section>
       </main>
     </>
@@ -63,9 +68,7 @@ function App() {
 
 // Header
 
-function Header() {
-  const [formVisibility, setFormVisibility] = useState(false);
-
+function Header({ formVisibility, setFormVisibility, setFacts }) {
   const headerTitle = "FactsBite";
 
   return (
@@ -78,21 +81,50 @@ function Header() {
         </button>
       </div>
 
-      {formVisibility ? <Form /> : null}
+      {formVisibility ? <Form setFormVisibility={setFormVisibility} setFacts={setFacts} /> : null}
     </header>
   );
 }
 
-function Form() {
+function Form({ setFormVisibility, setFacts }) {
   const [text, setText] = useState("");
   const [source, setSource] = useState("");
   const [category, setCategory] = useState("");
 
   const textMaxLimit = 200;
 
+  // Form Submission
+
   function handleSubmit(e) {
+    // 01. Prevent reload
     e.preventDefault();
-    console.log(text, source, category);
+
+    // 02. Make sure data is valid
+    if (text && source && category && text.length <= 200) {
+      //
+      // 03. Create new fact object
+      const newFact = {
+        id: Math.round(Math.random() * 100000),
+        text,
+        source,
+        category,
+        votes_interesting: 0,
+        votes_mindblowing: 0,
+        votes_negative: 0,
+        createdIn: new Date().getFullYear(),
+      };
+
+      // 04. Add new fact to the state (which will update the UI)
+      setFacts((facts) => [newFact, ...facts]);
+
+      // 05. Reset form values
+      setText("");
+      setSource("");
+      setCategory("");
+
+      // 06. Close the form
+      setFormVisibility(false);
+    }
   }
 
   return (
@@ -109,7 +141,7 @@ function Form() {
       />
       <span className="text-slate-50">{textMaxLimit - text.length}</span>
       <input
-        type="text"
+        type="url"
         placeholder="Trustworthy source"
         className="form-item"
         value={source}
@@ -170,7 +202,7 @@ function TagsRow() {
 
 // Facts list
 
-function FactsList() {
+function FactsList({ facts }) {
   return (
     <ul className="font-Sono" id="facts-list">
       {facts.map((fact) => (
