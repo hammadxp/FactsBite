@@ -84,17 +84,45 @@ function Header() {
 }
 
 function Form() {
-  return (
-    <form action="" className="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900">
-      <input type="text" placeholder="Share a fact with the world" className="form-item w-full" />
-      <span className="text-slate-50">200</span>
+  const [text, setText] = useState("");
+  const [source, setSource] = useState("");
+  const [category, setCategory] = useState("");
 
-      <input type="text" placeholder="Trustworthy source" className="form-item" />
-      <select name="" id="" className="form-item">
+  const textMaxLimit = 200;
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(text, source, category);
+  }
+
+  return (
+    <form
+      className="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900"
+      onSubmit={handleSubmit}
+    >
+      <input
+        type="text"
+        placeholder="Share a fact with the world"
+        className="form-item w-full"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <span className="text-slate-50">{textMaxLimit - text.length}</span>
+      <input
+        type="text"
+        placeholder="Trustworthy source"
+        className="form-item"
+        value={source}
+        onChange={(e) => setSource(e.target.value)}
+      />
+
+      <select className="form-item" value={category} onChange={(e) => setCategory(e.target.value)}>
         <option value="">Choose category</option>
-        <option value="technology">Technology</option>
-        <option value="science">Science</option>
-        <option value="finance">Finance</option>
+        {categories.map((category) => (
+          <option value={category.name} key={category.name}>
+            {category.name.toUpperCase()}
+          </option>
+        ))}
       </select>
       <button className="btn-gradient">Post</button>
     </form>
