@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import supabase from "./supabase";
 
 const categories = [
   { name: "technology", color: "#3b82f6" },
@@ -47,8 +48,25 @@ const initialFacts = [
 //
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formVisibility, setFormVisibility] = useState(false);
-  const [facts, setFacts] = useState(initialFacts);
+  const [facts, setFacts] = useState([]);
+
+  useEffect(function () {
+    async function loadFacts() {
+      setIsLoading(true);
+
+      const { data: facts, error } = await supabase
+        .from("facts")
+        .select("*")
+        .order("votes_interesting", { ascending: false })
+        .limit(1000);
+      setFacts(facts);
+
+      setIsLoading(false);
+    }
+    loadFacts();
+  }, []);
 
   return (
     <>
@@ -59,7 +77,7 @@ function App() {
 
         <section className="overflow-x-hidden p-8 pt-4">
           <TagsRow />
-          <FactsList facts={facts} />
+          {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} />}
         </section>
       </main>
     </>
@@ -204,11 +222,15 @@ function TagsRow() {
 
 function FactsList({ facts }) {
   return (
-    <ul className="font-Sono" id="facts-list">
-      {facts.map((fact) => (
-        <Fact fact={fact} key={fact.id} />
-      ))}
-    </ul>
+    <>
+      <ul className="font-Sono" id="facts-list">
+        {facts.map((fact) => (
+          <Fact fact={fact} key={fact.id} />
+        ))}
+      </ul>
+
+      <TotalFacts facts={facts} />
+    </>
   );
 }
 
@@ -253,8 +275,12 @@ function VoteButtons({ fact }) {
 
 // Test
 
-function TotalFacts() {
-  return <p>There are currently {facts.length} facts in the database.</p>;
+function TotalFacts({ facts }) {
+  return (
+    <div className="py-4 font-Sono">
+      <span className="block text-center">There are currently {facts.length} facts in the database.</span>
+    </div>
+  );
 }
 
 function Counter() {
@@ -266,6 +292,14 @@ function Counter() {
       <button className="btn" onClick={() => setCount((current) => current + 1)}>
         +1
       </button>
+    </div>
+  );
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="flex h-96 items-center justify-center font-Sono">
+      <span className="text-4xl">Interesting facts incoming...</span>
     </div>
   );
 }
