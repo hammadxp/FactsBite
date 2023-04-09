@@ -94,14 +94,14 @@ function App() {
 
         <section className="overflow-x-hidden p-8 pt-4">
           <CategoriesRow setCurrentCategory={setCurrentCategory} />
-          {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} />}
+          {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} setFacts={setFacts} />}
         </section>
       </main>
     </>
   );
 }
 
-// Header
+// ### HEADER ###
 
 function Header({ formVisibility, setFormVisibility, setFacts }) {
   const headerTitle = "FactsBite";
@@ -125,18 +125,19 @@ function Form({ setFormVisibility, setFacts }) {
   const [text, setText] = useState("");
   const [source, setSource] = useState("");
   const [category, setCategory] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const textMaxLimit = 200;
 
   // Form Submission
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     // 01. Prevent reload
     e.preventDefault();
 
     // 02. Make sure data is valid
     if (text && source && category && text.length <= 200) {
-      //
+      /*
       // 03. Create new fact object
       const newFact = {
         id: Math.round(Math.random() * 100000),
@@ -148,9 +149,17 @@ function Form({ setFormVisibility, setFacts }) {
         votes_negative: 0,
         createdIn: new Date().getFullYear(),
       };
+      */
+
+      // 03. Upload fact to supabase
+      setIsUploading(true);
+
+      const { data: newFact, error } = await supabase.from("facts").insert([{ text, source, category }]).select();
+
+      setIsUploading(false);
 
       // 04. Add new fact to the state (which will update the UI)
-      setFacts((facts) => [newFact, ...facts]);
+      if (!error) setFacts((facts) => [newFact[0], ...facts]);
 
       // 05. Reset form values
       setText("");
@@ -172,6 +181,7 @@ function Form({ setFormVisibility, setFacts }) {
         placeholder="Share a fact with the world"
         className="form-item w-full"
         value={text}
+        disabled={isUploading}
         onChange={(e) => setText(e.target.value)}
       />
       <span className="text-slate-50">{textMaxLimit - text.length}</span>
@@ -180,10 +190,16 @@ function Form({ setFormVisibility, setFacts }) {
         placeholder="Trustworthy source"
         className="form-item"
         value={source}
+        disabled={isUploading}
         onChange={(e) => setSource(e.target.value)}
       />
 
-      <select className="form-item" value={category} onChange={(e) => setCategory(e.target.value)}>
+      <select
+        className="form-item"
+        value={category}
+        disabled={isUploading}
+        onChange={(e) => setCategory(e.target.value)}
+      >
         <option value="">Choose category</option>
         {categories.map((category) => (
           <option value={category.name} key={category.name}>
@@ -191,7 +207,9 @@ function Form({ setFormVisibility, setFacts }) {
           </option>
         ))}
       </select>
-      <button className="btn-gradient">Post</button>
+      <button className="btn-gradient" style={isUploading ? { cursor: "not-allowed" } : {}}>
+        Post
+      </button>
     </form>
   );
 }
@@ -223,7 +241,7 @@ function SideBar() {
 
 function CategoriesRow({ setCurrentCategory }) {
   return (
-    <ul className="mb-6 flex gap-2 overflow-x-scroll pt-[6px]" id="tags-row">
+    <ul className="mb-6 flex gap-2 overflow-x-scroll pt-[6px]" id="categories-row">
       <li>
         <button className="btn-gradient" onClick={() => setCurrentCategory("all")}>
           All
@@ -233,7 +251,7 @@ function CategoriesRow({ setCurrentCategory }) {
       {categories.map((category) => (
         <li key={category.name}>
           <button
-            className="btn-tag"
+            className="btn-category"
             style={{ backgroundColor: category.color }}
             onClick={() => setCurrentCategory(category.name)}
           >
@@ -247,12 +265,12 @@ function CategoriesRow({ setCurrentCategory }) {
 
 // Facts list
 
-function FactsList({ facts }) {
+function FactsList({ facts, setFacts }) {
   return (
     <>
       <ul className="font-Sono" id="facts-list">
         {facts.map((fact) => (
-          <Fact fact={fact} key={fact.id} />
+          <Fact fact={fact} setFacts={setFacts} key={fact.id} />
         ))}
       </ul>
 
@@ -261,7 +279,23 @@ function FactsList({ facts }) {
   );
 }
 
-function Fact({ fact }) {
+function Fact({ fact, setFacts }) {
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  async function handleVote(columnName) {
+    setIsUpdating(true);
+
+    const { data: updatedFact, error } = await supabase
+      .from("facts")
+      .update({ [columnName]: fact[columnName] + 1 })
+      .eq("id", fact.id)
+      .select();
+
+    if (!error) setFacts((facts) => facts.map((curFact) => (curFact.id === fact.id ? updatedFact[0] : curFact)));
+
+    setIsUpdating(false);
+  }
+
   return (
     <li className="fact-item">
       <p>
@@ -270,7 +304,7 @@ function Fact({ fact }) {
           (Source)
         </a>
         <span
-          className="tag-small"
+          className="category-tag-small"
           style={{
             backgroundColor: categories.find((category) => category.name === fact.category).color,
           }}
@@ -279,24 +313,32 @@ function Fact({ fact }) {
         </span>
       </p>
 
-      <VoteButtons fact={fact} />
-    </li>
-  );
-}
+      <div className="ml-auto flex min-w-max max-w-fit gap-2">
+        <button
+          className="btn-vote"
+          style={isUpdating ? { cursor: "not-allowed" } : {}}
+          onClick={() => handleVote("votes_interesting")}
+        >
+          👍 <span className="font-bold">{fact.votes_interesting}</span>
+        </button>
 
-function VoteButtons({ fact }) {
-  return (
-    <div className="ml-auto flex min-w-max max-w-fit gap-2">
-      <button className="btn-vote">
-        👍 <span className="font-bold">{fact.votes_interesting}</span>
-      </button>
-      <button className="btn-vote">
-        🤯 <span className="font-bold">{fact.votes_mindblowing}</span>
-      </button>
-      <button className="btn-vote">
-        ⛔️ <span className="font-bold">{fact.votes_negative}</span>
-      </button>
-    </div>
+        <button
+          className="btn-vote"
+          style={isUpdating ? { cursor: "not-allowed" } : {}}
+          onClick={() => handleVote("votes_mindblowing")}
+        >
+          🤯 <span className="font-bold">{fact.votes_mindblowing}</span>
+        </button>
+
+        <button
+          className="btn-vote"
+          style={isUpdating ? { cursor: "not-allowed" } : {}}
+          onClick={() => handleVote("votes_negative")}
+        >
+          ⛔️ <span className="font-bold">{fact.votes_negative}</span>
+        </button>
+      </div>
+    </li>
   );
 }
 

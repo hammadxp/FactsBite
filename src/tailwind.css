@@ -9,12 +9,12 @@
     @apply cursor-pointer rounded-full border-4 border-transparent bg-pink-400 px-6 py-2 font-semibold text-slate-900 shadow-sm duration-200 hover:-translate-y-1;
   }
 
-  .btn-tag {
+  .btn-category {
     @apply btn rounded-full border-0 py-3 uppercase text-slate-50;
   }
 
   .btn-gradient {
-    @apply btn-tag bg-[linear-gradient(152deg,#3b82f6,#ef4444,#22c55e,#eab308)];
+    @apply btn-category bg-[linear-gradient(152deg,#3b82f6,#ef4444,#22c55e,#eab308)];
   }
 
   .btn-vote {
@@ -31,7 +31,7 @@
     @apply mx-2 text-slate-400 hover:text-inherit;
   }
 
-  .tag-small {
+  .category-tag-small {
     @apply rounded-full px-3 py-1 text-xs font-semibold uppercase;
   }
 
@@ -56,6 +56,6 @@ form *:focus-visible {
   @apply focus:outline-none focus:ring-4 focus:ring-slate-300;
 }
 
-#tags-row::-webkit-scrollbar {
+#categories-row::-webkit-scrollbar {
   display: none;
 }
