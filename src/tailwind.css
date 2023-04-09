@@ -28,7 +28,7 @@
   }
 
   .fact-source {
-    @apply text-slate-400 hover:text-inherit;
+    @apply mx-2 text-slate-400 hover:text-inherit;
   }
 
   .tag-small {

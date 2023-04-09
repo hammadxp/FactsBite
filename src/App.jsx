@@ -51,22 +51,39 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [formVisibility, setFormVisibility] = useState(false);
   const [facts, setFacts] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState("all");
 
-  useEffect(function () {
-    async function loadFacts() {
-      setIsLoading(true);
+  useEffect(
+    function () {
+      async function loadFacts() {
+        setIsLoading(true);
 
-      const { data: facts, error } = await supabase
-        .from("facts")
-        .select("*")
-        .order("votes_interesting", { ascending: false })
-        .limit(1000);
-      setFacts(facts);
+        // Build query string
 
-      setIsLoading(false);
-    }
-    loadFacts();
-  }, []);
+        let query = supabase.from("facts").select("*");
+
+        if (currentCategory !== "all") {
+          query.eq("category", currentCategory);
+        }
+
+        query.order("votes_interesting", { ascending: false }).limit(1000);
+
+        // Load facts
+
+        const { data: facts, error } = await query;
+
+        if (!error) {
+          setFacts(facts);
+        } else {
+          alert("There was a problem loading the facts.");
+        }
+
+        setIsLoading(false);
+      }
+      loadFacts();
+    },
+    [currentCategory]
+  );
 
   return (
     <>
@@ -76,7 +93,7 @@ function App() {
         <SideBar />
 
         <section className="overflow-x-hidden p-8 pt-4">
-          <TagsRow />
+          <CategoriesRow setCurrentCategory={setCurrentCategory} />
           {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} />}
         </section>
       </main>
@@ -179,7 +196,9 @@ function Form({ setFormVisibility, setFacts }) {
   );
 }
 
-// Main
+// ### MAIN ###
+
+// Sidebar
 
 function SideBar() {
   return (
@@ -200,16 +219,24 @@ function SideBar() {
   );
 }
 
-function TagsRow() {
+// Categories row
+
+function CategoriesRow({ setCurrentCategory }) {
   return (
     <ul className="mb-6 flex gap-2 overflow-x-scroll pt-[6px]" id="tags-row">
       <li>
-        <button className="btn-gradient">All</button>
+        <button className="btn-gradient" onClick={() => setCurrentCategory("all")}>
+          All
+        </button>
       </li>
 
       {categories.map((category) => (
         <li key={category.name}>
-          <button className="btn-tag" style={{ backgroundColor: category.color }}>
+          <button
+            className="btn-tag"
+            style={{ backgroundColor: category.color }}
+            onClick={() => setCurrentCategory(category.name)}
+          >
             {category.name}
           </button>
         </li>
@@ -273,15 +300,25 @@ function VoteButtons({ fact }) {
   );
 }
 
-// Test
-
 function TotalFacts({ facts }) {
+  if (facts.length === 0) {
+    return (
+      <div className="py-4 font-Sono">
+        <span className="block text-center">
+          There are no facts for this category right now. Try adding one yourself 🙂
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="py-4 font-Sono">
-      <span className="block text-center">There are currently {facts.length} facts in the database.</span>
+      <span className="block text-center">There are currently {facts.length} facts for this category.</span>
     </div>
   );
 }
+
+// Test
 
 function Counter() {
   const [count, setCount] = useState(0);
