@@ -72,3 +72,8 @@ form *:focus-visible {
 #categories-row::-webkit-scrollbar {
   display: none;
 }
+
+#sort-by {
+  -webkit-appearance: none;
+  appearance: none;
+}

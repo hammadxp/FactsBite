@@ -90,13 +90,16 @@ function App() {
       <Header formVisibility={formVisibility} setFormVisibility={setFormVisibility} setFacts={setFacts} />
 
       <main className="mx-auto grid grid-cols-[2fr,8fr] gap-2 1200px:grid-cols-[1fr,8fr] 704px:gap-4">
-        <SideBar />
+        <nav className="rounded-lg p-4 950px:px-2 704px:px-0" id="sidebar">
+          {isLoading ? "" : <SideBar facts={facts} />}
+        </nav>
 
         <section
           className="mb-2 h-[calc(100vh-104px)] overflow-x-hidden overflow-y-scroll rounded-lg bg-gray-800 p-8 pt-4 704px:px-4"
           id="facts-container"
         >
           <CategoriesRow setCurrentCategory={setCurrentCategory} />
+
           {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} setFacts={setFacts} />}
         </section>
       </main>
@@ -221,24 +224,35 @@ function Form({ setFormVisibility, setFacts }) {
 
 // Sidebar
 
-function SideBar() {
+function SideBar({ facts }) {
+  if (facts.length === 0) return;
+
+  const sortByOptions = Object.keys(facts[0]);
+
   return (
-    <nav className="rounded-lg p-4 950px:px-2 704px:px-0" id="sidebar">
-      <ul>
-        <li>
-          <a href="#" className="sidebar-item sidebar-item-active ">
-            <p>👍</p>
-            <p className="1200px:hidden">Interesting</p>
-          </a>
-        </li>
-        <li>
-          <a href="#" className="sidebar-item">
-            <p>🤯</p>
-            <p className="1200px:hidden">Mind-blowing</p>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <form action="" className="text-slate-900">
+      <select name="" className="w-full rounded-lg px-6 py-3" id="sort-by">
+        <option value="">Sort by:</option>
+        {sortByOptions.map((option) => {
+          const optionFormatted = option.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+          return (
+            <option value={option} key={option}>
+              {optionFormatted}
+            </option>
+          );
+        })}
+      </select>
+    </form>
+    // <ul>
+    //   {facts.map((fact) => (
+    //     <li key={fact.id}>
+    //       <a href="#" className="sidebar-item sidebar-item-active ">
+    //         <p className="1200px:hidden">{fact.id}</p>
+    //       </a>
+    //     </li>
+    //   ))}
+    // </ul>
   );
 }
 
