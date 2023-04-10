@@ -89,10 +89,13 @@ function App() {
     <>
       <Header formVisibility={formVisibility} setFormVisibility={setFormVisibility} setFacts={setFacts} />
 
-      <main className="grid grid-cols-[16rem,1fr]">
+      <main className="mx-auto grid grid-cols-[2fr,8fr] gap-2 1200px:grid-cols-[1fr,8fr] 704px:gap-4">
         <SideBar />
 
-        <section className="max-h-[32rem] overflow-x-hidden overflow-y-scroll p-8 pt-4" id="facts-container">
+        <section
+          className="mb-2 h-[calc(100vh-104px)] overflow-x-hidden overflow-y-scroll rounded-lg bg-gray-800 p-8 pt-4 704px:px-4"
+          id="facts-container"
+        >
           <CategoriesRow setCurrentCategory={setCurrentCategory} />
           {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} setFacts={setFacts} />}
         </section>
@@ -173,7 +176,7 @@ function Form({ setFormVisibility, setFacts }) {
 
   return (
     <form
-      className="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-slate-700 p-3 text-slate-900"
+      className="mb-4 mt-6 flex items-center gap-4 rounded-lg bg-gray-800 p-3 text-slate-900 950px:mx-auto 950px:max-w-2xl 950px:flex-col 950px:gap-6 950px:px-4 950px:py-6"
       onSubmit={handleSubmit}
     >
       <input
@@ -188,7 +191,7 @@ function Form({ setFormVisibility, setFacts }) {
       <input
         type="url"
         placeholder="Trustworthy source"
-        className="form-item"
+        className="form-item 950px:w-full"
         value={source}
         disabled={isUploading}
         onChange={(e) => setSource(e.target.value)}
@@ -220,16 +223,18 @@ function Form({ setFormVisibility, setFacts }) {
 
 function SideBar() {
   return (
-    <nav className="p-4" id="sidebar">
+    <nav className="rounded-lg p-4 950px:px-2 704px:px-0" id="sidebar">
       <ul>
         <li>
-          <a href="#" className="sidebar-item sidebar-item-active">
-            Popular
+          <a href="#" className="sidebar-item sidebar-item-active ">
+            <p>👍</p>
+            <p className="1200px:hidden">Interesting</p>
           </a>
         </li>
         <li>
           <a href="#" className="sidebar-item">
-            Mind-blowing
+            <p>🤯</p>
+            <p className="1200px:hidden">Mind-blowing</p>
           </a>
         </li>
       </ul>
@@ -298,22 +303,32 @@ function Fact({ fact, setFacts }) {
   }
 
   return (
-    <li className="fact-item">
-      <p>
+    <li
+      className="mb-4 flex cursor-default items-center gap-2 rounded-lg border-b-2 border-slate-600 bg-gray-700 px-6 py-4 duration-200 hover:-translate-y-1 hover:shadow-md 1200px:flex-col"
+      id="fact-item"
+    >
+      <div className="1200px:mb-2 1200px:w-full">
         {isDisputed ? <span className="mr-2 font-bold text-red-700">[⛔️DISPUTED]</span> : null}
-        {fact.text}
-        <a href={fact.source} target="_blank" className="fact-source">
+        <p className="inline 500px:block">{fact.text}</p>
+
+        <a
+          href={fact.source}
+          target="_blank"
+          className="mx-2 text-slate-400 hover:text-inherit 500px:ml-0"
+          id="fact-source"
+        >
           (Source)
         </a>
         <span
-          className="category-tag-small"
+          className="h-fit rounded-full px-3 py-1 text-xs font-semibold uppercase"
+          id="category-tag"
           style={{
             backgroundColor: categories.find((category) => category.name === fact.category).color,
           }}
         >
           {fact.category}
         </span>
-      </p>
+      </div>
 
       <div className="ml-auto flex min-w-max max-w-fit gap-2">
         <button
@@ -347,7 +362,7 @@ function Fact({ fact, setFacts }) {
 function TotalFacts({ facts }) {
   if (facts.length === 0) {
     return (
-      <div className="py-4 font-Sono">
+      <div className="pt-4 font-Sono 500px:text-xs">
         <span className="block text-center">
           There are no facts for this category right now. Try adding one yourself 🙂
         </span>
@@ -356,7 +371,7 @@ function TotalFacts({ facts }) {
   }
 
   return (
-    <div className="py-4 font-Sono">
+    <div className="pt-4 font-Sono 500px:text-xs">
       <span className="block text-center">There are currently {facts.length} facts for this category.</span>
     </div>
   );
@@ -380,7 +395,7 @@ function Counter() {
 function LoadingSpinner() {
   return (
     <div className="flex h-96 items-center justify-center font-Sono">
-      <span className="text-4xl">Interesting facts incoming...</span>
+      <span className="text-4xl 704px:text-2xl 500px:text-xl">Interesting facts incoming...</span>
     </div>
   );
 }
