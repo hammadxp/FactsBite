@@ -92,7 +92,7 @@ function App() {
       <main className="grid grid-cols-[16rem,1fr]">
         <SideBar />
 
-        <section className="overflow-x-hidden p-8 pt-4">
+        <section className="max-h-[32rem] overflow-x-hidden overflow-y-scroll p-8 pt-4" id="facts-container">
           <CategoriesRow setCurrentCategory={setCurrentCategory} />
           {isLoading ? <LoadingSpinner /> : <FactsList facts={facts} setFacts={setFacts} />}
         </section>
@@ -281,6 +281,7 @@ function FactsList({ facts, setFacts }) {
 
 function Fact({ fact, setFacts }) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const isDisputed = fact.votes_negative > fact.votes_interesting + fact.votes_mindblowing;
 
   async function handleVote(columnName) {
     setIsUpdating(true);
@@ -299,6 +300,7 @@ function Fact({ fact, setFacts }) {
   return (
     <li className="fact-item">
       <p>
+        {isDisputed ? <span className="mr-2 font-bold text-red-700">[⛔️DISPUTED]</span> : null}
         {fact.text}
         <a href={fact.source} target="_blank" className="fact-source">
           (Source)
