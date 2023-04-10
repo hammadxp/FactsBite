@@ -50,7 +50,7 @@
   }
 }
 
-form *:focus-visible {
+*:focus-visible {
   @apply focus:outline-none focus:ring-4 focus:ring-slate-300;
 }
 

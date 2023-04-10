@@ -52,6 +52,7 @@ function App() {
   const [formVisibility, setFormVisibility] = useState(false);
   const [facts, setFacts] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("all");
+  const [currentSort, setCurrentSort] = useState("votes_interesting");
 
   useEffect(
     function () {
@@ -66,7 +67,7 @@ function App() {
           query.eq("category", currentCategory);
         }
 
-        query.order("votes_interesting", { ascending: false }).limit(1000);
+        query.order(currentSort, { ascending: false }).limit(1000);
 
         // Load facts
 
@@ -82,7 +83,7 @@ function App() {
       }
       loadFacts();
     },
-    [currentCategory]
+    [currentCategory, currentSort]
   );
 
   return (
@@ -91,7 +92,7 @@ function App() {
 
       <main className="mx-auto grid grid-cols-[2fr,8fr] gap-2 1200px:grid-cols-[1fr,8fr] 704px:gap-4">
         <nav className="rounded-lg p-4 950px:px-2 704px:px-0" id="sidebar">
-          {isLoading ? "" : <SideBar facts={facts} />}
+          {isLoading ? "" : <SideBar facts={facts} currentSort={currentSort} setCurrentSort={setCurrentSort} />}
         </nav>
 
         <section
@@ -224,35 +225,34 @@ function Form({ setFormVisibility, setFacts }) {
 
 // Sidebar
 
-function SideBar({ facts }) {
+function SideBar({ facts, currentSort, setCurrentSort }) {
   if (facts.length === 0) return;
 
   const sortByOptions = Object.keys(facts[0]);
 
   return (
-    <form action="" className="text-slate-900">
-      <select name="" className="w-full rounded-lg px-6 py-3" id="sort-by">
-        <option value="">Sort by:</option>
-        {sortByOptions.map((option) => {
-          const optionFormatted = option.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    <>
+      <p className="mb-4 pl-2">Sort by:</p>
 
-          return (
-            <option value={option} key={option}>
-              {optionFormatted}
-            </option>
-          );
-        })}
-      </select>
-    </form>
-    // <ul>
-    //   {facts.map((fact) => (
-    //     <li key={fact.id}>
-    //       <a href="#" className="sidebar-item sidebar-item-active ">
-    //         <p className="1200px:hidden">{fact.id}</p>
-    //       </a>
-    //     </li>
-    //   ))}
-    // </ul>
+      <form className="text-slate-50">
+        <select
+          className="w-full rounded-lg bg-gray-800 px-6 py-3"
+          id="sort-by"
+          onChange={(e) => setCurrentSort(e.target.value)}
+          value={currentSort}
+        >
+          {sortByOptions.map((option) => {
+            const optionFormatted = option.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+            return (
+              <option value={option} key={option}>
+                {optionFormatted}
+              </option>
+            );
+          })}
+        </select>
+      </form>
+    </>
   );
 }
 
